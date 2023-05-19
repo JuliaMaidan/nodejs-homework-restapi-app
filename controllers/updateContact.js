@@ -1,10 +1,10 @@
-const contacts = require("../../models/contacts");
+const contacts = require("../models/contacts");
 
-const { RequestError } = require("../../helpers");
+const { RequestError } = require("../helpers");
 
 const updateContact = async (req, res) => {
   const { id } = req.params;
-  const result = await contacts.updateById(id, req.body);
+  const result = await contacts.updateContact(id, req.body);
   if (!req.body) {
     res.status(400).json({ message: "missing fields" });
   }

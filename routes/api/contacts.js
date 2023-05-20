@@ -14,11 +14,15 @@ router.get("/", ctrlWrapper(ctrl.listContacts));
 
 router.get("/:id", ctrlWrapper(ctrl.getContactById));
 
-router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
+router.post(
+  "/",
+  validateBody(schemas.addSchema, "Missing required field", true),
+  ctrlWrapper(ctrl.addContact)
+);
 
 router.put(
   "/:id",
-  validateBody(schemas.addSchema),
+  validateBody(schemas.addSchema, "Missing fields", false),
   ctrlWrapper(ctrl.updateContact)
 );
 

@@ -5,6 +5,7 @@ const router = express.Router();
 const ctrl = require("../../controllers");
 
 const { validateBody } = require("../../middlewares");
+const { putValidateBody } = require("../../middlewares");
 
 const schemas = require("../../schemas/contact");
 
@@ -14,15 +15,11 @@ router.get("/", ctrlWrapper(ctrl.listContacts));
 
 router.get("/:id", ctrlWrapper(ctrl.getContactById));
 
-router.post(
-  "/",
-  validateBody(schemas.addSchema, "Missing required field", true),
-  ctrlWrapper(ctrl.addContact)
-);
+router.post("/", validateBody(schemas.addSchema), ctrlWrapper(ctrl.addContact));
 
 router.put(
   "/:id",
-  validateBody(schemas.addSchema, "Missing fields", false),
+  putValidateBody(schemas.addSchema),
   ctrlWrapper(ctrl.updateContact)
 );
 

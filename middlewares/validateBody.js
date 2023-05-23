@@ -7,7 +7,6 @@ const validateBody = (schema) => {
       const fieldName = error.details[0].path[0];
       throw RequestError(400, `Missing required ${fieldName} field`);
     }
-
     next();
   };
 
@@ -24,7 +23,6 @@ const putValidateBody = (schema) => {
       const fieldName = error.details[0].path[0];
       throw RequestError(400, `Missing required ${fieldName} field`);
     }
-
     next();
   };
 

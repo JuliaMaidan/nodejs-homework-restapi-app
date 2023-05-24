@@ -1,57 +1,41 @@
-const fs = require("fs/promises");
-const path = require("path");
-const { nanoid } = require("nanoid");
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
 
-const contactsPath = path.join(__dirname, "contacts.json");
+const contactsSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Set name for contact"],
+    },
+    email: {
+      type: String,
+      // required: true,
+    },
+    phone: {
+      type: String,
+      // required: true,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const listContacts = async () => {
-  const data = await fs.readFile(contactsPath, "utf-8");
-  return JSON.parse(data);
-};
+const addSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  phone: Joi.string().required(),
+  false: Joi.boolean(),
+});
 
-const getContactById = async (id) => {
-  const contacts = await listContacts();
-  const result = contacts.find((contact) => contact.id === id);
-  return result || null;
-};
+const updateStatusContact = Joi.object({
+  favorite: Joi.boolean().required(),
+});
 
-const removeContact = async (id) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index === -1) {
-    return null;
-  }
-  const [result] = contacts.splice(index, 1);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return result;
-};
+const Contact = model("contact", contactsSchema);
 
-const addContact = async (data) => {
-  const contacts = await listContacts();
-  const newContact = {
-    id: nanoid(),
-    ...data,
-  };
-  contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return newContact;
-};
+const schemas = { addSchema, updateStatusContact };
 
-const updateContact = async (id, data) => {
-  const contacts = await listContacts();
-  const index = contacts.findIndex((contact) => contact.id === id);
-  if (index === -1) {
-    return null;
-  }
-  contacts[index] = { id, ...data };
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-  return contacts[index];
-};
-
-module.exports = {
-  listContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
-};
+module.exports = { Contact, schemas };

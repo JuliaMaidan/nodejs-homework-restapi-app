@@ -1,8 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-// const { handleSaveErrors } = require("../helpers");
-
 const userSchema = new Schema(
   {
     password: {
@@ -27,7 +25,7 @@ const userSchema = new Schema(
 const registerSchema = Joi.object({
   password: Joi.string().required(),
   email: Joi.string().required(),
-  subscription: Joi.string().required(),
+  subscription: Joi.string(),
 });
 
 const loginSchema = Joi.object({

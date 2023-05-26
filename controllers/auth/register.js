@@ -8,7 +8,7 @@ const register = async (req, res) => {
   const { password, email, subscription } = req.body;
   const user = await User.findOne({ email });
   if (user) {
-    throw RequestError(409, "User is already exist");
+    throw RequestError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -19,7 +19,6 @@ const register = async (req, res) => {
     subscription,
   });
   res.status(201).json({
-    password: result.password,
     email: result.email,
     subscription: result.subscription,
   });

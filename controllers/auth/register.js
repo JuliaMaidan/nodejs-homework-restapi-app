@@ -22,8 +22,10 @@ const register = async (req, res) => {
     avatarURL,
   });
   res.status(201).json({
-    email: result.email,
-    subscription: result.subscription,
+    user: {
+      email: result.email,
+      subscription: result.subscription,
+    },
   });
 };
 

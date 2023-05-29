@@ -1,6 +1,6 @@
 const fs = require("fs/promises");
 const path = require("path");
-
+const { resize } = require("../../middlewares/resize");
 const { User } = require("../../models/user");
 
 const avatarsDir = path.join(__dirname, "../../", "public", "avatars");
@@ -13,6 +13,8 @@ const updateAvatar = async (req, res) => {
   const resultUpload = path.join(avatarsDir, filename);
   await fs.rename(tempUpload, resultUpload);
   const avatarURL = path.join("avatars", filename);
+  const avatarPath = path.resolve("public", avatarURL);
+  resize(avatarPath);
   await User.findByIdAndUpdate(_id, { avatarURL });
 
   res.json({

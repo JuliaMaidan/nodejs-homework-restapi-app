@@ -5,14 +5,20 @@ const { schemas } = require("../../models/user");
 const ctrl = require("../../controllers/auth");
 const router = express.Router();
 
-// signup
 router.post(
   "/register",
   validateBody(schemas.registerSchema),
   ctrlWrapper(ctrl.register)
 );
 
-// signin
+router.get("/verify/:verificationToken", ctrlWrapper(ctrl.verify));
+
+router.post(
+  "/verify",
+  validateBody(schemas.verifyEmailSchema),
+  ctrlWrapper(ctrl.resendEmail)
+);
+
 router.post(
   "/login",
   validateBody(schemas.loginSchema),
